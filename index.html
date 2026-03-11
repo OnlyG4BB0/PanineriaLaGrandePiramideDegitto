@@ -3,275 +3,1236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA GRANDE PIRAMIDE D'EGITTO</title>
+    <title>La Grande Piramide D'Egitto | Panineria</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFCC00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L3 13h18L12 2z' fill='%23FFCC00' fill-opacity='0.1'/%3E%3Cpath d='M2 15h20v3H2z' fill='%23FFCC00'/%3E%3Cpath d='M4 19h16v1a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1z'/%3E%3C/svg%3E">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Variabili CSS Tema Street/Brutalist Dark */
+        :root {
+            --primary: #FFCC00; 
+            --bg-dark: #0a0a0a;
+            --bg-surface: #141414;
+            --border-color: #2a2a2a;
+            --white: #ffffff;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Reset Base */
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f8f8f8;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             overflow-x: hidden;
             scroll-behavior: smooth;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
+
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* =========================================
+           SPLASH SCREEN & ANIMAZIONI DI AVVIO
+           ========================================= */
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            background-color: var(--bg-dark);
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 999999;
+            transition: background-color 0.6s ease, opacity 0.6s ease;
+        }
+
+        @keyframes splashPulse {
+            0% { transform: translate(-50%, -50%) rotate(-3deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotate(-3deg) scale(1.08); }
+            100% { transform: translate(-50%, -50%) rotate(-3deg) scale(1); }
+        }
+
+        #splash-logo-wrapper {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-3deg);
+            width: 160px;
+            height: 160px;
+            background: #000;
+            padding: 15px;
+            border: 4px solid var(--primary);
+            box-shadow: 15px 15px 0px var(--primary);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000000;
+            animation: splashPulse 1.2s ease-in-out infinite;
+            /* Transizioni fluide per il volo verso l'alto a sinistra */
+            transition: top 0.9s cubic-bezier(0.86, 0, 0.07, 1),
+                        left 0.9s cubic-bezier(0.86, 0, 0.07, 1),
+                        transform 0.9s cubic-bezier(0.86, 0, 0.07, 1),
+                        width 0.9s cubic-bezier(0.86, 0, 0.07, 1),
+                        height 0.9s cubic-bezier(0.86, 0, 0.07, 1),
+                        padding 0.9s ease,
+                        border-width 0.9s ease,
+                        box-shadow 0.9s ease,
+                        border-radius 0.9s ease;
+        }
+
+        #splash-logo-wrapper.moving {
+            animation: none !important; /* Blocca il battito quando inizia a muoversi */
+        }
+
+        #splash-logo-wrapper svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Testi nascosti prima dell'avvio */
+        body:not(.site-loaded) .hero-badge-anim,
+        body:not(.site-loaded) .hero-title-anim,
+        body:not(.site-loaded) .hero-desc-anim,
+        body:not(.site-loaded) .hero-btn-anim,
+        body:not(.site-loaded) .hero-img-anim {
+            animation: none !important;
+            opacity: 0;
+        }
+
+        header .brand-name, 
+        header .brand-sub, 
+        header nav {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body.site-loaded header .brand-name, 
+        body.site-loaded header .brand-sub, 
+        body.site-loaded header nav {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        body.site-loaded header .brand-sub { transition-delay: 0.1s; }
+        body.site-loaded header nav { transition-delay: 0.2s; }
+
+
+        /* =========================================
+           HEADER URBAN
+           ========================================= */
         header {
-            background-color: #ffc107;
-            padding: 20px;
-            text-align: center;
+            background-color: rgba(10, 10, 10, 0.9);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
         }
-        header img {
-            width: 100px;
+
+        header.scrolled {
+            padding: 12px 5%;
+            background-color: rgba(10, 10, 10, 0.98);
         }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-name {
+            font-weight: 900;
+            font-size: 1.6rem;
+            color: var(--white);
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .brand-sub {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin-top: 2px;
+        }
+
         nav {
-            margin-top: 20px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
         }
+
+        .nav-links {
+            display: flex;
+            gap: 50px;
+        }
+
         nav a {
-            margin: 0 15px;
             text-decoration: none;
-            color: #333;
-            font-weight: bold;
-            transition: color 0.3s, transform 0.3s;
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: var(--transition);
+            position: relative;
         }
-        nav a:hover {
-            color: #e0a800;
-            transform: scale(1.1);
+
+        nav a:not(.nav-btn):hover {
+            color: var(--primary);
         }
+
+        .nav-btn {
+            background-color: var(--primary);
+            color: #000;
+            padding: 10px 24px;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0px var(--white);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .nav-btn:hover {
+            color: #000;
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--white);
+        }
+
+        .nav-btn:active {
+            transform: translate(6px, 6px) !important;
+            box-shadow: 0px 0px 0px var(--white) !important;
+        }
+
+        /* =========================================
+           HERO SECTION MASSICCIA
+           ========================================= */
         .main-banner {
-            background-color: #f8b400;
-            color: white;
-            text-align: center;
-            padding: 100px 20px;
-            animation: fadeIn 2s ease-in;
-        }
-        .main-banner img {
-            width: 300px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .main-banner h1 {
-            font-size: 3em;
-            margin: 20px 0;
-        }
-        .main-banner p {
-            font-size: 1.5em;
-        }
-        .content {
-            padding: 50px 20px;
-            text-align: center;
-        }
-        .content h2 {
-            font-size: 2.5em;
-            margin-bottom: 40px;
-        }
-        .menu-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            justify-items: center;
-        }
-        .menu-item {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            width: 100%;
-            max-width: 300px;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 5% 40px;
+            position: relative;
             overflow: hidden;
         }
-        .menu-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+        .main-banner::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(255, 204, 0, 0.08) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
         }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            width: 100%;
+            gap: 60px;
+            z-index: 2;
+        }
+
+        .hero-text {
+            flex: 1.2;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 8px 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 0.85rem;
+            margin-bottom: 24px;
+            letter-spacing: 2px;
+            box-shadow: 4px 4px 0px var(--primary);
+        }
+
+        .hero-text h1 {
+            font-size: 5.5rem;
+            font-weight: 900;
+            line-height: 0.9;
+            margin-bottom: 24px;
+            color: var(--white);
+            letter-spacing: -3px;
+        }
+
+        .hero-text h1 span {
+            color: var(--primary);
+            text-shadow: 4px 4px 0px rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 500px;
+            border-left: 4px solid var(--primary);
+            padding-left: 20px;
+        }
+
+        .hero-btn {
+            background-color: var(--primary);
+            color: #000;
+            padding: 18px 40px;
+            text-decoration: none;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            border: 2px solid #fff;
+            box-shadow: 8px 8px 0px #fff;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        .hero-btn .arrow {
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .hero-btn:hover {
+            transform: translate(4px, 4px);
+            box-shadow: 4px 4px 0px #fff;
+            background-color: var(--white);
+            color: #000;
+        }
+
+        .hero-btn:hover .arrow {
+            transform: translateY(4px);
+        }
+
+        .hero-btn:active {
+            transform: translate(8px, 8px) !important;
+            box-shadow: 0px 0px 0px #fff !important;
+        }
+
+        .hero-image {
+            flex: 1;
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 650px;
+            border: 4px solid var(--primary);
+            box-shadow: 15px 15px 0px var(--primary);
+            object-fit: cover;
+            aspect-ratio: 1;
+            transform: scale(1.05) rotate(-3deg);
+            animation: float-heavy 5s ease-in-out infinite;
+        }
+
+        /* Animazioni di ingresso contenuti sito */
+        .hero-badge-anim { animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards; }
+        .hero-title-anim { animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
+        .hero-desc-anim { animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards; }
+        .hero-btn-anim { animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; }
+        .hero-img-anim { animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.4s forwards; transform: scale(0.8) rotate(0deg); }
+
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            100% { opacity: 1; transform: scale(1.05) rotate(-3deg); }
+        }
+
+        @keyframes float-heavy {
+            0% { transform: translateY(0px) rotate(-3deg); }
+            50% { transform: translateY(-15px) rotate(-1deg); }
+            100% { transform: translateY(0px) rotate(-3deg); }
+        }
+
+        /* =========================================
+           TICKER GIALLO NEON
+           ========================================= */
+        .features-ticker {
+            background-color: var(--primary);
+            color: #000;
+            padding: 25px 0;
+            overflow: hidden;
+            display: flex;
+            white-space: nowrap;
+            border-top: 4px solid #000;
+            border-bottom: 4px solid #000;
+            transform: rotate(-1deg) scale(1.02);
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(255, 204, 0, 0.15);
+        }
+
+        .ticker-content {
+            display: flex;
+            gap: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            animation: ticker 15s linear infinite;
+        }
+
+        .ticker-content span {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* =========================================
+           SEZIONE MENU
+           ========================================= */
+        .content {
+            padding: 120px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title h2 {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--white);
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+
+        .section-title span {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--primary);
+        }
+
+        .section-title p {
+            color: var(--primary);
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            margin-top: 15px;
+            letter-spacing: 4px;
+        }
+
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        /* Classi Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            height: 100%;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Card Hamburgheria */
+        .menu-item {
+            background-color: var(--bg-surface);
+            border: 2px solid var(--border-color);
+            position: relative;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .menu-item:hover {
+            border-color: var(--primary);
+            transform: translate(-6px, -6px);
+            box-shadow: 10px 10px 0px var(--primary);
+        }
+
+        .tag-popular {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background-color: var(--white);
+            color: #000;
+            padding: 8px 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            z-index: 10;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0px var(--primary);
+        }
+
+        .img-wrapper {
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 2px solid var(--border-color);
+            background-color: #000;
+        }
+
+        .menu-item:hover .img-wrapper {
+            border-bottom-color: var(--primary);
+        }
+
         .menu-item img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
         }
-        .menu-item h3 {
-            margin: 15px 0;
-            font-size: 1.5em;
-            color: #333;
+
+        .menu-item:hover img {
+            transform: scale(1.1) rotate(2deg);
+            opacity: 1;
         }
-        .menu-item p {
-            font-size: 1.2em;
-            margin: 5px 15px;
-            color: #666;
+
+        .card-body {
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
-        .menu-item .price {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #e0a800;
-            margin: 10px 0;
+
+        .card-body h3 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+            color: var(--white);
+            letter-spacing: -1px;
+            transition: color 0.3s;
         }
-        .allergens-btn {
-            background-color: #ffc107;
+
+        .menu-item:hover .card-body h3 {
+            color: var(--primary);
+        }
+
+        .card-body p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .price-btn {
+            background-color: transparent;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            padding: 0;
             border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
             display: inline-block;
-            font-size: 1em;
-            margin: 15px;
+        }
+
+        .allergens-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            font-weight: 700;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
         }
+
+        .menu-item:hover .allergens-btn {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
         .allergens-btn:hover {
-            background-color: #e0a800;
+            background-color: var(--primary);
+            color: #000;
         }
+
+        .allergens-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* =========================================
+           FOOTER & MODAL
+           ========================================= */
         footer {
-            background-color: #333;
-            color: white;
+            background-color: #050505;
+            color: var(--white);
+            padding: 80px 5% 40px;
             text-align: center;
-            padding: 20px;
+            border-top: 2px solid var(--border-color);
         }
-        footer a {
-            color: #ffc107;
+
+        .footer-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .footer-logo span {
+            color: var(--primary);
+        }
+
+        .social-links {
+            margin: 40px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: #000;
+            background-color: var(--white);
             text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1rem;
+            text-transform: uppercase;
+            padding: 15px 30px;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0px var(--primary);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+
+        .social-links a:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--primary);
+            background-color: var(--primary);
         }
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+
+        .social-links a:active {
+            transform: translate(6px, 6px) !important;
+            box-shadow: 0px 0px 0px var(--primary) !important;
+        }
+
+        .footer-text {
+            color: #555;
+            font-size: 0.9rem;
+            margin-top: 60px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Modal Brutalista */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: var(--bg-surface);
+            padding: 50px 40px;
+            border: 4px solid var(--primary);
+            box-shadow: 15px 15px 0px var(--primary);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            transform: translateY(20px) scale(0.95);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .modal-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .modal-text {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .modal-text b {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        .modal-close-btn {
+            background-color: var(--primary);
+            color: #000;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0px var(--white);
+            padding: 15px 0;
+            width: 100%;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--white);
+        }
+
+        .modal-close-btn:active {
+            transform: translate(6px, 6px) !important;
+            box-shadow: 0px 0px 0px var(--white) !important;
+        }
+
+        /* =========================================
+           RESPONSIVE DESIGN
+           ========================================= */
+        @media (max-width: 1200px) {
+            .hero-text h1 { font-size: 4.5rem; }
+        }
+
+        @media (max-width: 1024px) {
+            .hero-text h1 { font-size: 4rem; }
+            .section-title h2 { font-size: 3rem; }
+            .nav-links { gap: 20px; }
+            .hero-content { gap: 30px; }
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 15px 5%; }
+            .nav-links { display: none; }
+            
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 20px;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .hero-text p { margin: 0 auto 30px; border-left: none; padding-left: 0; }
+            .hero-text h1 { font-size: 3.2rem; }
+            .hero-image img { max-width: 100%; }
+            
+            .content { padding: 60px 5%; }
+            .section-title h2 { font-size: 2.5rem; }
+            
+            .menu-container {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
+            
+            .menu-item:hover {
+                transform: translate(-4px, -4px);
+                box-shadow: 6px 6px 0px var(--primary);
+            }
+            
+            .social-links { 
+                flex-direction: column; 
+                align-items: center;
+            }
+            
+            .social-links a {
+                width: 100%;
+                max-width: 300px;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-text h1 { font-size: 2.5rem; letter-spacing: -1px; }
+            .brand-name { font-size: 1.2rem; }
+            .nav-btn { padding: 8px 16px; font-size: 0.8rem; }
+            .hero-btn { padding: 15px 30px; font-size: 1rem; }
+            .section-title h2 { font-size: 2rem; }
+            .footer-logo { font-size: 2rem; }
+            .ticker-content { font-size: 1.1rem; gap: 30px; }
+            .modal-box { padding: 30px 20px; }
+            .modal-title { font-size: 1.8rem; }
+            .footer-text { font-size: 0.8rem; line-height: 1.4; padding: 0 10px; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <img src="https://mrpanini.se/intra/Finland/Mr.%20Panini%20brand/Logo/MrPanini-logo.png" alt="Logo">
+
+    <!-- OVERLAY SPLASH SCREEN INIZIALE -->
+    <div id="splash-screen">
+        <div id="splash-logo-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L3 13h18L12 2z" fill="var(--primary)" fill-opacity="0.15"></path>
+                <path d="M2 15h20v3H2z" fill="var(--primary)"></path>
+                <path d="M4 19h16v1a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="main-header">
+        <div class="logo-container">
+            <!-- Il logo vero, invisibile finché l'animazione non termina -->
+            <svg id="main-logo" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="background: #000; padding: 4px; border: 2px solid var(--primary); box-shadow: 4px 4px 0px var(--primary); border-radius: 8px; transform: rotate(-3deg); opacity: 0;">
+                <path d="M12 2L3 13h18L12 2z" fill="var(--primary)" fill-opacity="0.15"></path>
+                <path d="M2 15h20v3H2z" fill="var(--primary)"></path>
+                <path d="M4 19h16v1a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1z"></path>
+            </svg>
+            <div>
+                <span class="brand-name">LA GRANDE PIRAMIDE</span>
+                <span class="brand-sub">D'EGITTO</span>
+            </div>
+        </div>
         <nav>
-            <a href="#banner">Home</a>
-            <a href="#menu">Menu</a>
-            <a href="#contact">Contatti</a>
+            <div class="nav-links">
+                <a href="#banner">Home</a>
+                <a href="#menu">Il Menù</a>
+            </div>
+            <a href="#contact" class="nav-btn">SEGUICI ORA</a>
         </nav>
     </header>
 
+    <!-- Banner Principale -->
     <section class="main-banner" id="banner">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2cddUkQGCqvq7iRFCAlFdoBDhoXd2MwUrTQ&s" alt="Double Burger BBQ">
-        <h1>LA GRANDE PIRAMIDE D'EGITTO</h1>
-        <p>Senti il richiamo del gusto?</p>
-    </section>
-
-    <section class="content" id="menu">
-        <h2>Il nostro menù</h2>
-        <div class="menu-container">
-            <div class="menu-item">
-                <img src="https://s3-eu-west-1.amazonaws.com/dailyfoodpubblici/wp-content/uploads/2018/12/IMG_20181212_200210-500x667.jpg" alt="Panino 1">
-                <h3>Panino Classico</h3>
-                <p>Delizioso panino con prosciutto, formaggio e insalata.</p>
-                <p class="price">Prezzo: €5.00</p>
-                <button class="allergens-btn">Vedi allergeni</button>
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="badge hero-badge-anim">🔥 IL PIÙ BUONO DI LECCE</div>
+                <h1 class="hero-title-anim">IL GUSTO<br><span>CHE SPACCA.</span></h1>
+                <p class="hero-desc-anim">Abbandona i sapori noiosi. Solo ingredienti di qualità, carne di prima scelta e ricette monumentali per chi ha davvero fame.</p>
+                <a href="#menu" class="hero-btn hero-btn-anim">MORDI IL MENÙ <span class="arrow">↓</span></a>
             </div>
-            <div class="menu-item">
-                <img src="https://www.105.net/resizer/-1/-1/true/panini-1586948362261.JPG--.JPG" alt="Panino 2">
-                <h3>Panino Vegetariano</h3>
-                <p>Panino con verdure grigliate, hummus e insalata.</p>
-                <p class="price">Prezzo: €6.00</p>
-                <button class="allergens-btn">Vedi allergeni</button>
-            </div>
-            <div class="menu-item">
-                <img src="https://www.105.net/resizer/1000/683/false/dolce-1586948548182.JPG--dolce_e_salato.JPG" alt="Panino 3">
-                <h3>Panino Dolce</h3>
-                <p>Pane dolce con crema di nocciole e frutta fresca.</p>
-                <p class="price">Prezzo: €4.50</p>
-                <button class="allergens-btn">Vedi allergeni</button>
-            </div>
-            <div class="menu-item">
-                <img src="https://lh4.googleusercontent.com/proxy/spP4x7bZCFQ5qkw8o8dgEliN1h1vje4Z-UQqTCNUGb9ru2ZSFcu4hdATh3F7ha3nqZu74YsWZTacN8mj_mCoWOEdohqaYFQ15YeuzlGZOVGuLxRJ9zrRNYRMBNvXjvFca8Y" alt="Panino 4">
-                <h3>Panino con Frittata</h3>
-                <p>Panino con frittata di uova, pomodori e insalata.</p>
-                <p class="price">Prezzo: €5.50</p>
-                <button class="allergens-btn">Vedi allergeni</button>
-            </div>
-            <div class="menu-item">
-                <img src="https://lalunadeigolosi.com/wp-content/uploads/2020/03/IMG_9847-1-640x485.jpg" alt="Panino 5">
-                <h3>Panino con Bollito</h3>
-                <p>Panino con bollito di carne, salsa verde e cipolle.</p>
-                <p class="price">Prezzo: €7.00</p>
-                <button class="allergens-btn">Vedi allergeni</button>
-            </div>
-            <div class="menu-item">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-8DTDiRVlyL3bB78Q4RRmx9shnORkRNSL2g&s" alt="Panino 6">
-                <h3>Panino con Bollub</h3>
-                <p>Panino con pollo grigliato, avocado e maionese.</p>
-                <p class="price">Prezzo: €6.50</p>
-                <button class="allergens-btn">Vedi allergeni</button>
-            </div>
-            <div class="menu-item">
-                <img src="https://media-cdn.tripadvisor.com/media/photo-p/0d/45/d4/bf/panino-no2.jpg" alt="Panino 7">
-                <h3>Panino Integrale</h3>
-                <p>Panino integrale con tonno, uova e pomodori.</p>
-                <p class="price">Prezzo: €6.00</p>
-                <button class="allergens-btn">Vedi allergeni</button>
-            </div>
-            <div class="menu-item">
-                <img src="https://blog.giallozafferano.it/giovannibrigandi69/wp-content/uploads/2021/01/777CB3DE-BA27-4DD0-B3E0-8B11381151FA-scaled.jpeg" alt="Panino 8">
-                <h3>Panino al Salmone</h3>
-                <p>Panino con salmone affumicato, formaggio cremoso e rucola.</p>
-                <p class="price">Prezzo: €8.00</p>
-                <button class="allergens-btn">Vedi allergeni</button>
-            </div>
-            <div class="menu-item">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpzeRJ6cMboUwOxVs4NhPAIOPtBYSlFKCpSwSTvMODzQbFZQFMO4j3cQwl_w48BhYmPRw&usqp=CAU" alt="Panino 9">
-                <h3>Panino con Cotoletta</h3>
-                <p>Panino con cotoletta di pollo, lattuga e maionese.</p>
-                <p class="price">Prezzo: €7.50</p>
-                <button class="allergens-btn">Vedi allergeni</button>
-            </div>
-            <div class="menu-item">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZh89r3vmI-wMDhWtUALe22RFBSsTUzCQvOg&s" alt="Panino 10">
-                <h3>Panino Gourmet</h3>
-                <p>Panino con filetto di manzo, funghi porcini e salsa tartufata.</p>
-                <p class="price">Prezzo: €12.00</p>
-                <button class="allergens-btn">Vedi allergeni</button>
+            <div class="hero-image hero-img-anim">
+                <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=800" alt="Il nostro super hamburger">
             </div>
         </div>
     </section>
 
-    <footer id="contact">
-        <p>&copy; 2024 LA GRANDE PIRAMIDE D'EGITTO. Immagini puramente dimostrative.</p>
-        <p>Seguici su <a href="https://www.instagram.com/panineriagpde?utm_source=ig_web_button_share_sheet&igshid=ZDNlZDc0MzIxNw">Instagram</a>, <a href="https://youtube.com/@panineriagrandepiramidedeggitt?si=jHBstxC_f03AQckt">YouTube</a></p>
+    <!-- Ticker Scorrevole Neon -->
+    <div class="features-ticker reveal">
+        <div class="ticker-content">
+            <span>⚡ FOOD PORN ⚡</span>
+            <span>🍔 100% CARNE SCELTA 🍔</span>
+            <span>🔥 DIRTY & GOOD 🔥</span>
+            <span>🤤 GUSTO ESTREMO 🤤</span>
+            <span>💣 PREPARAZIONE ESPRESSA 💣</span>
+            <!-- Duplicato per scroll continuo -->
+            <span>⚡ FOOD PORN ⚡</span>
+            <span>🍔 100% CARNE SCELTA 🍔</span>
+            <span>🔥 DIRTY & GOOD 🔥</span>
+            <span>🤤 GUSTO ESTREMO 🤤</span>
+            <span>💣 PREPARAZIONE ESPRESSA 💣</span>
+        </div>
+    </div>
+
+    <!-- Sezione Menu -->
+    <section class="content" id="menu">
+        <div class="section-header reveal">
+            <div class="section-title">
+                <h2>I NOSTRI <span>PEZZI DA 90</span></h2>
+                <p>SCEGLI LA TUA ARMA</p>
+            </div>
+        </div>
+
+        <div class="menu-container" id="menu-grid">
+            
+            <div class="reveal">
+                <div class="menu-item">
+                    <div class="tag-popular">🔥 BEST SELLER</div>
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=600" alt="Il Classico">
+                    </div>
+                    <div class="card-body">
+                        <h3>IL CLASSICO</h3>
+                        <p>Croccante e spietato: prosciutto crudo stagionato, formaggio fuso colante e insalata fresca.</p>
+                        <div class="card-footer">
+                            <span class="price-btn">€5.00</span>
+                            <button class="allergens-btn">Allergeni</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="menu-item">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&q=80&w=600" alt="Green Power">
+                    </div>
+                    <div class="card-body">
+                        <h3>GREEN POWER</h3>
+                        <p>Panino morbido con mix di verdure grigliate a fiamma viva, hummus fatto in casa e insalata.</p>
+                        <div class="card-footer">
+                            <span class="price-btn">€6.00</span>
+                            <button class="allergens-btn">Allergeni</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="menu-item">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600" alt="Sweet Killer">
+                    </div>
+                    <div class="card-body">
+                        <h3>SWEET KILLER</h3>
+                        <p>Soffice pane artigianale annegato nella crema di nocciole e frutta fresca di stagione.</p>
+                        <div class="card-footer">
+                            <span class="price-btn">€4.50</span>
+                            <button class="allergens-btn">Allergeni</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="menu-item">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&q=80&w=600" alt="Egg Mashup">
+                    </div>
+                    <div class="card-body">
+                        <h3>EGG MASHUP</h3>
+                        <p>Spessa frittata di uova fresche, pomodori a fette spesse e lattuga croccante. Intramontabile.</p>
+                        <div class="card-footer">
+                            <span class="price-btn">€5.50</span>
+                            <button class="allergens-btn">Allergeni</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="menu-item">
+                    <div class="tag-popular">💣 ESAGERATO</div>
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&q=80&w=600" alt="Bollito Dirty">
+                    </div>
+                    <div class="card-body">
+                        <h3>BOLLITO DIRTY</h3>
+                        <p>Montagna di bollito di carne tenerissima, inondata di salsa verde rustica e cipolle caramellate.</p>
+                        <div class="card-footer">
+                            <span class="price-btn">€7.00</span>
+                            <button class="allergens-btn">Allergeni</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="menu-item">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&q=80&w=600" alt="Chicken Club">
+                    </div>
+                    <div class="card-body">
+                        <h3>CHICKEN CLUB</h3>
+                        <p>Pollo grigliato a strati, crema di avocado densa e una colata di maionese leggera.</p>
+                        <div class="card-footer">
+                            <span class="price-btn">€6.50</span>
+                            <button class="allergens-btn">Allergeni</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="menu-item">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1551248429-40975aa4de74?auto=format&fit=crop&q=80&w=600" alt="Dark Tuna">
+                    </div>
+                    <div class="card-body">
+                        <h3>DARK TUNA</h3>
+                        <p>Pane 100% integrale nero farcito con trancio di tonno spesso, uova sode e pomodori.</p>
+                        <div class="card-footer">
+                            <span class="price-btn">€6.00</span>
+                            <button class="allergens-btn">Allergeni</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="menu-item">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&q=80&w=600" alt="Salmon Lux">
+                    </div>
+                    <div class="card-body">
+                        <h3>SALMON LUX</h3>
+                        <p>Salmone affumicato scozzese pregiato, formaggio spalmabile abbondante e rucola piccantina.</p>
+                        <div class="card-footer">
+                            <span class="price-btn">€8.00</span>
+                            <button class="allergens-btn">Allergeni</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="menu-item">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=600" alt="Crispy King">
+                    </div>
+                    <div class="card-body">
+                        <h3>CRISPY KING</h3>
+                        <p>Il re dello street food: cotoletta di pollo fritta dorata ed extra croccante, iceberg e mayo.</p>
+                        <div class="card-footer">
+                            <span class="price-btn">€7.50</span>
+                            <button class="allergens-btn">Allergeni</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="menu-item">
+                    <div class="tag-popular">👑 PREMIUM</div>
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1586816001966-79b736744398?auto=format&fit=crop&q=80&w=600" alt="Truffle Beef">
+                    </div>
+                    <div class="card-body">
+                        <h3>TRUFFLE BEEF</h3>
+                        <p>L'eccellenza assoluta: filetto di manzo scelto, funghi porcini a fette e salsa al tartufo nero.</p>
+                        <div class="card-footer">
+                            <span class="price-btn">€12.00</span>
+                            <button class="allergens-btn">Allergeni</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer Underground -->
+    <footer id="contact" class="reveal">
+        <div class="footer-logo">
+            LA GRANDE <span>PIRAMIDE</span>
+        </div>
+        <div class="social-links">
+            <a href="https://www.instagram.com/panineriagpde" target="_blank">INSTAGRAM</a>
+            <a href="https://youtube.com/@panineriagrandepiramidedeggitt" target="_blank">YOUTUBE</a>
+        </div>
+        <p class="footer-text">&copy; 2026 LA GRANDE PIRAMIDE D'EGITTO. Solo per i veri affamati.</p>
     </footer>
 
+    <!-- Modal Allergeni Brutalista -->
+    <div class="modal-overlay" id="allergen-modal">
+        <div class="modal-box">
+            <div style="font-size: 4rem; margin-bottom: 20px; animation: pulse 1s infinite;">⚠️</div>
+            <h3 class="modal-title">ALLERGENI?</h3>
+            <p class="modal-text">Sinceramente... <b>NON LI SO!</b> 😂<br><br><small style="color:#777; font-size: 0.9rem;">(Chiedi direttamente al banco per non saltare in aria!)</small></p>
+            <button class="modal-close-btn" id="close-modal">RICEVUTO!</button>
+        </div>
+    </div>
+
+    <!-- Script JS -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const images = document.querySelectorAll('.menu-item img');
-            images.forEach(img => {
-                img.addEventListener('mouseover', function() {
-                    img.classList.add('animate__animated', 'animate__pulse');
-                });
-                img.addEventListener('mouseout', function() {
-                    img.classList.remove('animate__animated', 'animate__pulse');
-                });
+            
+            // ==========================================
+            // LOGICA SPLASH SCREEN ANIMATO
+            // ==========================================
+            
+            // 1. Assicurati che parta dall'alto e blocca lo scroll
+            window.scrollTo(0, 0);
+            document.body.style.overflow = 'hidden'; 
+            
+            const splashScreen = document.getElementById('splash-screen');
+            const splashLogo = document.getElementById('splash-logo-wrapper');
+            const mainLogo = document.getElementById('main-logo');
+            
+            // Lascia pulsare il logo al centro per 1.2 secondi
+            setTimeout(() => {
+                // Ferma l'animazione del battito
+                splashLogo.classList.add('moving');
+                
+                // Calcola l'esatta posizione finale del logo nell'header
+                const target = mainLogo.getBoundingClientRect();
+                
+                // Fai svanire lo sfondo scuro per rivelare la sagoma del sito sotto
+                splashScreen.style.backgroundColor = 'transparent';
+                splashScreen.style.backgroundImage = 'none';
+                
+                // Manda il logo grande verso le coordinate del logo piccolo in alto a sx
+                splashLogo.style.top = target.top + 'px';
+                splashLogo.style.left = target.left + 'px';
+                splashLogo.style.transform = 'translate(0, 0) rotate(-3deg)';
+                splashLogo.style.width = target.width + 'px';
+                splashLogo.style.height = target.height + 'px';
+                splashLogo.style.padding = '4px';
+                splashLogo.style.borderWidth = '2px';
+                splashLogo.style.boxShadow = '4px 4px 0px var(--primary)';
+                splashLogo.style.borderRadius = '8px';
+                
+                // Attendi la fine del "volo" (900ms come impostato nel CSS)
+                setTimeout(() => {
+                    mainLogo.style.opacity = '1'; // Mostra il vero logo
+                    splashLogo.style.opacity = '0'; // Nascondi quello volante
+                    
+                    // Cleanup e avvio animazioni dei testi
+                    setTimeout(() => {
+                        splashScreen.style.display = 'none';
+                        splashLogo.style.display = 'none';
+                        document.body.style.overflow = ''; // Sblocca scroll
+                        document.body.classList.add('site-loaded'); // Innesca le animazioni in cascata!
+                    }, 100);
+                }, 900); 
+                
+            }, 1200);
+
+
+            // ==========================================
+            // ALTRE LOGICHE DEL SITO
+            // ==========================================
+
+            // Header scroll effect
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
             });
 
+            // Logica Modal Allergeni
+            const modalOverlay = document.getElementById('allergen-modal');
+            const closeBtn = document.getElementById('close-modal');
             const allergensBtns = document.querySelectorAll('.allergens-btn');
+
             allergensBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    alert('NON LI SO.');
+                    modalOverlay.classList.add('active');
                 });
             });
 
-            const links = document.querySelectorAll('nav a');
+            closeBtn.addEventListener('click', function() {
+                modalOverlay.classList.remove('active');
+            });
+
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    modalOverlay.classList.remove('active');
+                }
+            });
+
+            // Smooth Scrolling
+            const links = document.querySelectorAll('nav a, .hero-btn');
             links.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.querySelector(link.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
+                    const targetId = this.getAttribute('href');
+                    if(targetId.startsWith('#')) {
+                        e.preventDefault();
+                        const targetElement = document.querySelector(targetId);
+                        if(targetElement) {
+                            const headerOffset = 80;
+                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                            
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
                 });
+            });
+
+            // Intersection Observer per animazione carte a comparsa (Scroll Reveal)
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const observer = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach((item, index) => {
+                // Aggiunge un ritardo sfalsato alla griglia per l'effetto a scala
+                if(item.parentElement.id === 'menu-grid') {
+                    item.style.transitionDelay = `${(index % 3) * 0.15}s`;
+                }
+                observer.observe(item);
             });
         });
     </script>
